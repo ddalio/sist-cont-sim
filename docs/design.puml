@@ -1,0 +1,66 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+
+package "simulacion.continuo" {
+    class Main {
+        + {static} main(args: String[])
+    }
+
+    class SistemaContinuo {
+        - parametros: Map<String, Double>
+        - variables: List<Variable>
+        - h: double
+        - t_max: double
+        - tiempo: double
+        + cargarParametros(config: Configuracion)
+        + paso()
+        + run()
+    }
+
+    package "configuracion" {
+        class Configuracion <<record>> {
+            + parametros: Map<String, Double>
+            + h: double
+            + t_max: double
+            + tolerance: double
+        }
+
+        class ConfiguracionLoader {
+            + {static} load(): Configuracion
+        }
+    }
+
+    package "variables" {
+        abstract class Variable {
+            - nombre: String
+            - valor: double
+            - derivada: double
+            + avanzar(dt: double)
+            + {abstract} calcularDerivada(parametros: Map<String, Double>, variables: List<Variable>)
+            + getValor(): double
+            + setDerivada(d: double)
+        }
+
+        class Posicion {
+            + calcularDerivada(parametros: Map<String, Double>, variables: List<Variable>)
+        }
+
+        class Velocidad {
+            + calcularDerivada(parametros: Map<String, Double>, variables: List<Variable>)
+        }
+    }
+}
+
+' Relaciones
+Main ..> ConfiguracionLoader : usa
+Main ..> SistemaContinuo : instancía
+ConfiguracionLoader ..> Configuracion : crea
+SistemaContinuo o-- Variable : contiene lista de
+SistemaContinuo ..> Configuracion : recibe datos de
+
+Variable <|-- Posicion
+Variable <|-- Velocidad
+
+@enduml
