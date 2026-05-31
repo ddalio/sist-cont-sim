@@ -1,0 +1,10 @@
+[
+  { "nombre": "masa", "valor": 1.0 },
+  { "nombre": "coeficienteAmortiguamiento", "valor": 0.5 },
+  { "nombre": "constanteElasticaLineal", "valor": 20.0 },
+  { "nombre": "coeficienteNoLinealidad", "valor": 0.1 },
+  { "nombre": "aceleracionGravitatoria", "valor": 9.8 },
+  { "nombre": "h", "valor": 0.001 },
+  { "nombre": "t_max", "valor": 50.0 },
+  { "nombre": "tolerance", "valor": 0.001 }
+]
