@@ -1,14 +1,15 @@
 package simulacion.continuo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import simulacion.continuo.configuracion.Configuracion;
+import simulacion.continuo.variables.ModeloFisico;
 import simulacion.continuo.variables.Posicion;
 import simulacion.continuo.variables.Variable;
 import simulacion.continuo.variables.Velocidad;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 public class SistemaContinuo {
     Map<String, Double> parametros = new HashMap<>();
@@ -18,14 +19,14 @@ public class SistemaContinuo {
     double tolerance = 0.001;
     double tiempo = 0.0;
 
-    public void cargarParametros(Configuracion config) {
+    public void cargarParametros(Configuracion config, ModeloFisico modelo) {
         this.parametros = config.parametros();
         this.h = config.h();
         this.t_max = config.t_max();
         this.tolerance = config.tolerance();
 
         variables.add(new Posicion(1.0));
-        variables.add(new Velocidad(0.0));
+        variables.add(new Velocidad(0.0, modelo));
     }
 
     public void paso() {

@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 public class Velocidad extends Variable {
-    public Velocidad(double valor) {
+    private ModeloFisico modelo;
+    
+    public Velocidad(double valor, ModeloFisico modelo) {
         super("velocidad", valor);
+        this.modelo = modelo;
     }
 
     @Override
@@ -19,7 +22,7 @@ public class Velocidad extends Variable {
         if (posicion != null) {
             double x = posicion.getValor();
             double v = getValor();
-            setDerivada((-b * v - k * x) / m);
+            setDerivada(modelo.calcularAceleracion(x, v, parametros));
         }
     }
 }
