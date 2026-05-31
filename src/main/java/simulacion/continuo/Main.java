@@ -8,16 +8,18 @@ import simulacion.continuo.variables.ModeloNoLineal;
 
 public class Main {
     public static void main(String[] args) {
-        Configuracion configuracion = ConfiguracionLoader.load();
+        Configuracion config = ConfiguracionLoader.load();
+        
+        // Simulación Lineal
+        SistemaContinuo sisLineal = new SistemaContinuo();
+        sisLineal.setNombreArchivo("lineal.csv");
+        sisLineal.cargarParametros(config, new ModeloLineal());
+        sisLineal.run();
 
-        System.out.println("Sistema lineal con modelo lineal:");
-        SistemaContinuo sistema = new SistemaContinuo();
-        sistema.cargarParametros(configuracion, new ModeloLineal());
-        sistema.run();
-
-        System.out.println("Sistema lineal con modelo NO lineal:");
-        SistemaContinuo sistema2 = new SistemaContinuo();
-        sistema2.cargarParametros(configuracion, new ModeloNoLineal());
-        sistema2.run();
+        // Simulación No Lineal
+        SistemaContinuo sisNoLineal = new SistemaContinuo();
+        sisNoLineal.setNombreArchivo("no_lineal.csv");
+        sisNoLineal.cargarParametros(config, new ModeloNoLineal());
+        sisNoLineal.run();
     }
 }
