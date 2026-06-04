@@ -1,5 +1,6 @@
 package simulacion.continuo;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Estado {
@@ -12,5 +13,9 @@ public class Estado {
 
     public Double get(String nombre) {
         return variables.get(nombre).getValor();
+    }
+
+    public ArrayList<Variable> getVariables() {
+        return new ArrayList<>(variables.values());
     }
 }

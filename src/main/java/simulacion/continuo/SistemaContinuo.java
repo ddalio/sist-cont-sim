@@ -1,9 +1,9 @@
 package simulacion.continuo;
 
-import simulacion.continuo.configuracion.Configuracion;
-
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import simulacion.continuo.configuracion.Configuracion;
 
 public class SistemaContinuo {
     Map<String, Double> parametros = new HashMap<>();
@@ -24,10 +24,10 @@ public class SistemaContinuo {
     }
 
     public void paso() {
-        for (Variable v : variables) {
-            v.calcularDerivada(parametros, variables);
+        for (Variable v : estado.getVariables()) {
+            v.calcularDerivada(estado);
         }
-        for (Variable v : variables) {
+        for (Variable v : estado.getVariables()) {
             v.avanzar(h);
         }
         tiempo += h;
@@ -38,7 +38,7 @@ public class SistemaContinuo {
             paso();
             if (tiempo % 1.0 < h) {
                 System.out.printf("Tiempo: %.2f | ", tiempo);
-                variables.forEach(v -> System.out.printf("%s: %.4f ", v.getNombre(), v.getValor()));
+                estado.getVariables().forEach(v -> System.out.printf("%s: %.4f ", v.getNombre(), v.getValor()));
                 System.out.println();
             }
         }
