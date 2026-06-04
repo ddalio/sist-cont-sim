@@ -18,6 +18,12 @@ public class TerminoFactory {
                     parametros.get("masa")
             );
 
+            case "ResorteLineal" -> new ResorteNoLineal(
+                parametros.get("constanteElasticaLineal"),
+                0.0, // Al ser lineal, el coeficiente de no linealidad (alpha) es cero
+                parametros.get("masa")
+            );
+
             case "ResorteNoLineal" -> new ResorteNoLineal(
                     parametros.get("constanteElasticaLineal"),
                     parametros.get("coeficienteNoLinealidad"),

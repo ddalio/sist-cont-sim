@@ -1,8 +1,8 @@
 package simulacion.continuo;
 
-import simulacion.continuo.terminos.Termino;
-
 import java.util.List;
+
+import simulacion.continuo.terminos.Termino;
 
 public class Variable {
     private List<Termino> terminos;
@@ -13,6 +13,7 @@ public class Variable {
     public Variable(String nombre, double valor, List<Termino> terminos) {
         this.nombre = nombre;
         this.valor = valor;
+        this.terminos = terminos;
     }
 
     public String getNombre() {
