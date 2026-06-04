@@ -38,15 +38,4 @@ public class SistemaContinuo {
         integrador.paso(estado, h);
         tiempo += h;
     }
-
-    public void run() {
-        while (tiempo < t_max) {
-            paso();
-            if (tiempo % 1.0 < h) {
-                System.out.printf("Tiempo: %.2f | ", tiempo);
-                estado.getVariables().forEach(v -> System.out.printf("%s: %.4f ", v.getNombre(), v.getValor()));
-                System.out.println();
-            }
-        }
-    }
 }

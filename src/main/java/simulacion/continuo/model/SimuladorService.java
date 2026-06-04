@@ -19,20 +19,17 @@ public class SimuladorService {
 
     public void ejecutar(Map<String, Double> parametros, boolean esLineal, SimulacionCallback callback) {
         Thread hiloCalculo = new Thread(() -> {
-            // 1. Ensamblar el sistema usando la fábrica
             Configuracion config = ConfiguracionLoader.load();
             SistemaContinuo sistema = SistemaFactory.crear(parametros, esLineal, config);
             
             final double h = config.h();
             final double tMax = config.t_max();
 
-            // 2. Bucle de Simulación
             List<Double> tiempos = new ArrayList<>();
             List<Double> posiciones = new ArrayList<>();
             List<Double> velocidades = new ArrayList<>();
 
             double t = 0.0;
-            // Variables auxiliares para acceso rápido
             Variable posVar = sistema.getVariables().stream().filter(v -> v.getNombre().equals("posicion")).findFirst().orElseThrow();
             Variable velVar = sistema.getVariables().stream().filter(v -> v.getNombre().equals("velocidad")).findFirst().orElseThrow();
 
