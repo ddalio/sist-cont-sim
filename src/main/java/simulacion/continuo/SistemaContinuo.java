@@ -2,21 +2,22 @@ package simulacion.continuo;
 
 import java.util.List;
 import simulacion.continuo.configuracion.Configuracion;
+import simulacion.continuo.metodos.Integrador;
 
 public class SistemaContinuo {
     Estado estado;
+    Integrador integrador;
     double h = 0.001;
     double t_max = 50.0;
     double tolerance = 0.001;
     double tiempo = 0.0;
 
-    public SistemaContinuo(Estado estado) {
+    public SistemaContinuo(Estado estado, Integrador integrador) {
         this.estado = estado;
+        this.integrador = integrador;
     }
 
     public void agregarVariable(Variable variable) {
-        // Implementación mínima para mantener compatibilidad si es necesario
-        // En la versión actual, las variables suelen pasarse en el constructor del Estado
     }
 
     public double getTiempo() {
@@ -34,7 +35,7 @@ public class SistemaContinuo {
     }
 
     public void paso() {
-        estado.paso(h);
+        integrador.paso(estado, h);
         tiempo += h;
     }
 

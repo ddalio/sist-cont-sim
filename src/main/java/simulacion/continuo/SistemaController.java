@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
+import simulacion.continuo.metodos.IntegradorRK4;
 import simulacion.continuo.terminos.Termino;
 import simulacion.continuo.terminos.TerminoFactory;
 
@@ -140,10 +141,9 @@ public class SistemaController {
         mapaVariables.put(posicion.getNombre(), posicion);
         Estado estado = new Estado(mapaVariables);
 
-        // 5. Instanciar el backend del SistemaContinuo
-        sistema = new SistemaContinuo(estado);
+        // 5. Instanciar el backend del SistemaContinuo con un Integrador (RK4 por defecto)
+        sistema = new SistemaContinuo(estado, new IntegradorRK4());
         
-        // ¡Paso crucial! Llenamos la lista interna para evitar que el log/cálculo esté vacío
         sistema.agregarVariable(velocidad);
         sistema.agregarVariable(posicion);
 

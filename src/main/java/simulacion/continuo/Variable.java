@@ -36,10 +36,6 @@ public class Variable {
         this.derivada = derivada;
     }
 
-    public void avanzar(double dt) {
-        valor += derivada * dt;
-    }
-
     public void calcularDerivada(Estado estado) {
         double derivada = 0.0;
         for(Termino termino : terminos){

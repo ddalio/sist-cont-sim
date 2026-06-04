@@ -8,15 +8,41 @@ package "simulacion.continuo" {
         + {static} main(args: String[])
     }
 
+    class SistemaController {
+        - chartEvolucion: LineChart
+        - chartFases: LineChart
+        - sistema: SistemaContinuo
+        + initialize()
+        + clickIniciar()
+        - prepararSimulador()
+    }
+
     class SistemaContinuo {
-        - parametros: Map<String, Double>
-        - variables: List<Variable>
+        - estado: Estado
         - h: double
         - t_max: double
         - tiempo: double
         + cargarParametros(config: Configuracion)
         + paso()
         + run()
+    }
+
+    class Estado {
+        - variables: Map<String, Variable>
+        + paso(dt: double)
+        + get(nombre: String): Double
+        + getVariables(): List<Variable>
+    }
+
+    class Variable {
+        - terminos: List<Termino>
+        - nombre: String
+        - valor: double
+        - derivada: double
+        + calcularDerivada(estado: Estado)
+        + avanzar(dt: double)
+        + getValor(): double
+        + getNombre(): String
     }
 
     package "configuracion" {
@@ -32,35 +58,48 @@ package "simulacion.continuo" {
         }
     }
 
-    package "variables" {
-        abstract class Variable {
-            - nombre: String
-            - valor: double
-            - derivada: double
-            + avanzar(dt: double)
-            + {abstract} calcularDerivada(parametros: Map<String, Double>, variables: List<Variable>)
-            + getValor(): double
-            + setDerivada(d: double)
+    package "terminos" {
+        interface Termino {
+            + calcular(estado: Estado): double
         }
 
-        class Posicion {
-            + calcularDerivada(parametros: Map<String, Double>, variables: List<Variable>)
+        class TerminoFactory {
+            - parametros: Map<String, Double>
+            + crear(nombre: String): Termino
         }
 
-        class Velocidad {
-            + calcularDerivada(parametros: Map<String, Double>, variables: List<Variable>)
+        class Amortiguamiento implements Termino
+        class Gravedad implements Termino
+        class ResorteNoLineal implements Termino
+        class VelocidadActual implements Termino
+    }
+
+    package "metodos" {
+        interface Integrador {
+            + paso(estado: Estado, h: double)
         }
+
+        class IntegradorEuler implements Integrador
+        class IntegradorRK4 implements Integrador
     }
 }
 
 ' Relaciones
-Main ..> ConfiguracionLoader : usa
-Main ..> SistemaContinuo : instancía
-ConfiguracionLoader ..> Configuracion : crea
-SistemaContinuo o-- Variable : contiene lista de
-SistemaContinuo ..> Configuracion : recibe datos de
+Main ..> SistemaController : carga (FXML)
+SistemaController o-- SistemaContinuo
+SistemaController ..> TerminoFactory : usa
+SistemaController ..> Variable : crea
+SistemaController ..> Estado : crea
 
-Variable <|-- Posicion
-Variable <|-- Velocidad
+SistemaContinuo o-- Estado
+SistemaContinuo o-- Integrador
+Estado o-- Variable
+
+Variable o-- Termino : lista de
+
+Termino ..> Estado : usa para calcular
+Integrador ..> Estado : opera sobre
+Integrador ..> Variable : actualiza valor de
 
 @enduml
+

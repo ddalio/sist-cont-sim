@@ -12,7 +12,6 @@ public class ResorteNoLineal implements Termino {
             double constanteElasticaLineal,
             double coeficienteNoLinealidad,
             double masa) {
-
         this.constanteElasticaLineal = constanteElasticaLineal;
         this.coeficienteNoLinealidad = coeficienteNoLinealidad;
         this.masa = masa;

@@ -16,17 +16,6 @@ public class Estado {
         return variables.get(nombre).getValor();
     }
 
-    public void paso(double time) {
-
-        for (Variable variable : variables.values()) {
-            variable.calcularDerivada(this);
-        }
-
-        for (Variable variable : variables.values()) {
-            variable.avanzar(time);
-        }
-    }
-
     public ArrayList<Variable> getVariables() {
         return new ArrayList<>(variables.values());
     }
