@@ -37,10 +37,24 @@ public class SimuladorService {
             double t = 0.0;
             Variable posVar = sistema.getVariables().stream().filter(v -> v.getNombre().equals("posicion")).findFirst().orElseThrow();
             Variable velVar = sistema.getVariables().stream().filter(v -> v.getNombre().equals("velocidad")).findFirst().orElseThrow();
-
+            int pasosEnEquilibrio = 0;
+            
             while (t < tMax) {
                 sistema.paso();
                 t = sistema.getTiempo();
+
+                double x = posVar.getValor();
+                double v = velVar.getValor();
+
+                if (Math.abs(x) < 0.001 && Math.abs(v) < 0.001) {
+                    pasosEnEquilibrio++;
+                } else {
+                    pasosEnEquilibrio = 0;
+                }
+
+                if (pasosEnEquilibrio >= 100) {
+                    break;
+                }
 
                 if (Math.round(t / h) % 10 == 0) {
                     tiempos.add(t);
