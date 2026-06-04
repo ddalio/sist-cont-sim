@@ -1,6 +1,7 @@
 package simulacion.continuo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import simulacion.continuo.configuracion.Configuracion;
@@ -15,6 +16,18 @@ public class SistemaContinuo {
 
     public SistemaContinuo(Estado estado) {
         this.estado = estado;
+    }
+
+    public void agregarVariable(Variable variable) {
+        this.estado.getVariables().add(variable);
+    }
+
+    public double getTiempo() {
+        return this.tiempo;
+    }
+
+    public List<Variable> getVariables() {
+        return estado.getVariables();
     }
 
     public void cargarParametros(Configuracion config) {
