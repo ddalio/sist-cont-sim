@@ -9,12 +9,25 @@ package "simulacion.continuo" {
     }
 
     class SistemaController {
-        - chartEvolucion: LineChart
-        - chartFases: LineChart
-        - sistema: SistemaContinuo
+        - vista: SistemaGrafico
+        - simuladorService: SimuladorService
+        - mapaSliders: Map<String, Slider>
         + initialize()
         + clickIniciar()
-        - prepararSimulador()
+        + clickLimpiar()
+        - generarInterfazDinamica()
+    }
+
+    class SistemaGrafico {
+        - chartEvolucion: LineChart
+        - chartFases: LineChart
+        - lblTiempo: Label
+        + preparar()
+        + actualizar(pos, vel, fase, t)
+    }
+
+    class SimuladorService {
+        + ejecutar(parametros, esLineal, callback)
     }
 
     class SistemaContinuo {
@@ -86,10 +99,15 @@ package "simulacion.continuo" {
 
 ' Relaciones
 Main ..> SistemaController : carga (FXML)
-SistemaController o-- SistemaContinuo
-SistemaController ..> TerminoFactory : usa
-SistemaController ..> Variable : crea
-SistemaController ..> Estado : crea
+SistemaController o-- SistemaGrafico
+SistemaController o-- SimuladorService
+
+SimuladorService ..> SistemaContinuo : instancia
+SimuladorService ..> TerminoFactory : usa
+SimuladorService ..> Variable : crea
+SimuladorService ..> Estado : crea
+SimuladorService ..> ConfiguracionLoader : usa
+SimuladorService ..> Configuracion : usa
 
 SistemaContinuo o-- Estado
 SistemaContinuo o-- Integrador
@@ -100,6 +118,9 @@ Variable o-- Termino : lista de
 Termino ..> Estado : usa para calcular
 Integrador ..> Estado : opera sobre
 Integrador ..> Variable : actualiza valor de
+
+ConfiguracionLoader ..> Configuracion : crea
+SistemaContinuo ..> Configuracion : recibe datos de
 
 @enduml
 
