@@ -1,8 +1,8 @@
-package simulacion.continuo;
+package simulacion.continuo.model;
 
 import java.util.List;
 
-import simulacion.continuo.terminos.Termino;
+import simulacion.continuo.model.terminos.Termino;
 
 public class Variable {
     private List<Termino> terminos;

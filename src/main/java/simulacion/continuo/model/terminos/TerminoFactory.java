@@ -1,4 +1,4 @@
-package simulacion.continuo.terminos;
+package simulacion.continuo.model.terminos;
 
 import java.util.Map;
 public class TerminoFactory {

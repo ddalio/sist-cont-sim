@@ -1,9 +1,10 @@
-package simulacion.continuo.configuracion;
+package simulacion.continuo.model.configuracion;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,9 @@ public class ConfiguracionLoader {
             
             List<Map<String, Object>> configItems = mapper.readValue(is, new TypeReference<List<Map<String, Object>>>() {});
 
-            Map<String, Double> simulationParams = new HashMap<>();
+            // Usamos LinkedHashMap para mantener el orden de definición del JSON en la UI
+            Map<String, ParametroConfig> simulationParams = new LinkedHashMap<>();
+            
             for (Map<String, Object> item : configItems) {
                 String nombre = (String) item.get("nombre");
                 double valor = ((Number) item.get("valor")).doubleValue();
@@ -33,7 +36,12 @@ public class ConfiguracionLoader {
                     case "t_max": t_max = valor; break;
                     case "tolerance": tolerance = valor; break;
                     default:
-                        simulationParams.put(nombre, valor);
+                        double min = item.containsKey("min") ? ((Number) item.get("min")).doubleValue() : 0.0;
+                        double max = item.containsKey("max") ? ((Number) item.get("max")).doubleValue() : Math.max(100.0, valor * 2);
+                        String unidad = (String) item.getOrDefault("unidad", "");
+                        String label = (String) item.getOrDefault("label", formatearNombre(nombre));
+                        
+                        simulationParams.put(nombre, new ParametroConfig(valor, min, max, unidad, label));
                         break;
                 }
             }
@@ -41,5 +49,11 @@ public class ConfiguracionLoader {
         } catch (Exception e) {
             throw new RuntimeException("Error al cargar la configuracion", e);
         }
+    }
+
+    private static String formatearNombre(String camelCase) {
+        if (camelCase == null || camelCase.isEmpty()) return "";
+        String result = camelCase.replaceAll("([A-Z])", " $1");
+        return result.substring(0, 1).toUpperCase() + result.substring(1);
     }
 }

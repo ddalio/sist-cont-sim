@@ -1,4 +1,4 @@
-package simulacion.continuo;
+package simulacion.continuo.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,13 +13,14 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import simulacion.continuo.configuracion.Configuracion;
-import simulacion.continuo.configuracion.ConfiguracionLoader;
+import simulacion.continuo.model.configuracion.Configuracion;
+import simulacion.continuo.model.configuracion.ConfiguracionLoader;
+import simulacion.continuo.model.configuracion.ParametroConfig;
+import simulacion.continuo.model.SimuladorService;
+import simulacion.continuo.view.SistemaGrafico;
 
 /**
- * Controlador dinámico de la interfaz. 
- * Genera los controles de usuario automáticamente respetando el estilo original.
- */
+ * Controlador dinámico de la interfaz.  */
 public class SistemaController {
 
     @FXML private LineChart<Number, Number> chartEvolucion;
@@ -53,28 +54,27 @@ public class SistemaController {
         contenedorParametros.getChildren().clear();
         mapaSliders.clear();
 
-        for (Map.Entry<String, Double> entrada : config.parametros().entrySet()) {
+        for (Map.Entry<String, ParametroConfig> entrada : config.parametros().entrySet()) {
             String nombreParam = entrada.getKey();
-            double valorInicial = entrada.getValue();
+            ParametroConfig param = entrada.getValue();
 
             VBox bloque = new VBox(5.0);
             
             HBox filaLabels = new HBox(5.0);
             filaLabels.setAlignment(Pos.CENTER_LEFT);
             
-            Label lblNombre = new Label(formatearNombre(nombreParam) + ": ");
+            Label lblNombre = new Label(param.label() + ": ");
             lblNombre.setTextFill(Color.BLACK);
             
-            Label lblValor = new Label(String.format("%.2f", valorInicial));
+            Label lblValor = new Label(String.format("%.2f", param.valor()));
             lblValor.setTextFill(Color.BLACK);
             
-            String unidad = inferirUnidad(nombreParam);
-            Label lblUnidad = new Label(unidad);
-            lblUnidad.setTextFill(Color.BLACK); // Asegurar color negro
+            Label lblUnidad = new Label(param.unidad());
+            lblUnidad.setTextFill(Color.BLACK);
             
             filaLabels.getChildren().addAll(lblNombre, lblValor, lblUnidad);
 
-            Slider slider = new Slider(0, Math.max(100, valorInicial * 2), valorInicial);
+            Slider slider = new Slider(param.min(), param.max(), param.valor());
             slider.setShowTickMarks(false);
             
             slider.valueProperty().addListener((obs, oldVal, newVal) -> 
@@ -87,24 +87,12 @@ public class SistemaController {
         }
     }
 
-    private String inferirUnidad(String nombre) {
-        if (nombre.equalsIgnoreCase("masa")) return " kg";
-        if (nombre.equalsIgnoreCase("constanteElasticaLineal")) return " N/m";
-        if (nombre.equalsIgnoreCase("aceleracionGravitatoria")) return " m/s²";
-        return "";
-    }
-
-    private String formatearNombre(String camelCase) {
-        String result = camelCase.replaceAll("([A-Z])", " $1");
-        return result.substring(0, 1).toUpperCase() + result.substring(1);
-    }
-
     @FXML
     public void clickValoresIniciales() {
         Configuracion config = ConfiguracionLoader.load();
-        for (Map.Entry<String, Double> entrada : config.parametros().entrySet()) {
+        for (Map.Entry<String, ParametroConfig> entrada : config.parametros().entrySet()) {
             Slider s = mapaSliders.get(entrada.getKey());
-            if (s != null) s.setValue(entrada.getValue());
+            if (s != null) s.setValue(entrada.getValue().valor());
         }
         btnTipoSistema.setSelected(false);
     }

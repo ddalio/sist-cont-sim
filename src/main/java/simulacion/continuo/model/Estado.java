@@ -1,4 +1,4 @@
-package simulacion.continuo;
+package simulacion.continuo.model;
 
 import java.util.ArrayList;
 import java.util.List;

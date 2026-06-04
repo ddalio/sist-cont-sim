@@ -1,4 +1,4 @@
-package simulacion.continuo;
+package simulacion.continuo.view;
 
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;

@@ -1,8 +1,8 @@
-package simulacion.continuo;
+package simulacion.continuo.model;
 
 import java.util.List;
-import simulacion.continuo.configuracion.Configuracion;
-import simulacion.continuo.metodos.Integrador;
+import simulacion.continuo.model.configuracion.Configuracion;
+import simulacion.continuo.model.metodos.Integrador;
 
 public class SistemaContinuo {
     Estado estado;

@@ -1,9 +1,9 @@
-package simulacion.continuo.configuracion;
+package simulacion.continuo.model.configuracion;
 
 import java.util.Map;
 
 public record Configuracion(
-    Map<String, Double> parametros,
+    Map<String, ParametroConfig> parametros,
     double h,
     double t_max,
     double tolerance

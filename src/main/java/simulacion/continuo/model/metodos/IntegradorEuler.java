@@ -1,7 +1,7 @@
-package simulacion.continuo.metodos;
+package simulacion.continuo.model.metodos;
 
-import simulacion.continuo.Estado;
-import simulacion.continuo.Variable;
+import simulacion.continuo.model.Estado;
+import simulacion.continuo.model.Variable;
 
 public class IntegradorEuler implements Integrador {
     @Override

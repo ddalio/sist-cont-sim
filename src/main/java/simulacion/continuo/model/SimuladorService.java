@@ -1,12 +1,12 @@
-package simulacion.continuo;
+package simulacion.continuo.model;
 
 import javafx.application.Platform;
 import javafx.scene.chart.XYChart;
-import simulacion.continuo.configuracion.Configuracion;
-import simulacion.continuo.configuracion.ConfiguracionLoader;
-import simulacion.continuo.metodos.IntegradorRK4;
-import simulacion.continuo.terminos.Termino;
-import simulacion.continuo.terminos.TerminoFactory;
+import simulacion.continuo.model.configuracion.Configuracion;
+import simulacion.continuo.model.configuracion.ConfiguracionLoader;
+import simulacion.continuo.model.metodos.IntegradorRK4;
+import simulacion.continuo.model.terminos.Termino;
+import simulacion.continuo.model.terminos.TerminoFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
