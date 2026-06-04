@@ -1,5 +1,10 @@
 package simulacion.continuo.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -8,17 +13,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import simulacion.continuo.model.ExportadorService;
 import simulacion.continuo.model.ResultadoSimulacion;
+import simulacion.continuo.model.SimuladorService;
 import simulacion.continuo.model.configuracion.Configuracion;
 import simulacion.continuo.model.configuracion.ConfiguracionLoader;
-import simulacion.continuo.model.SimuladorService;
-import simulacion.continuo.view.SistemaGrafico;
 import simulacion.continuo.view.ControlParametro;
 import simulacion.continuo.view.PanelParametros;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import simulacion.continuo.view.SistemaGrafico;
 
 public class SistemaController {
 
@@ -27,12 +31,13 @@ public class SistemaController {
     @FXML private Label lblTiempo;
     @FXML private VBox contenedorParametros;
     @FXML private ToggleButton btnTipoSistema;
-    @FXML private Button btnRun, btnLimpiar, btnValoresIniciales;
+    @FXML private Button btnRun, btnLimpiar, btnValoresIniciales,  btnExportar;
 
     private SistemaGrafico vista;
     private final SimuladorService simuladorService = new SimuladorService();
     private PanelParametros panelUI;
     private Configuracion config;
+    private ResultadoSimulacion ultimoResultado = null;
 
     @FXML
     public void initialize() {
@@ -87,9 +92,18 @@ public class SistemaController {
                 listaFases.add(new XYChart.Data<>(x, v));
             }
 
+            ultimoResultado = resultado;
+
             // Actualizar UI en el hilo de JavaFX
             Platform.runLater(() -> {
-                vista.actualizar(listaPosicion, listaVelocidad, listaFases, resultado.tFinal());
+                vista.actualizar(
+                    listaPosicion,
+                    listaVelocidad,
+                    listaFases,
+                    resultado.tFinal()
+                );
+
+                btnExportar.setDisable(false);
                 desactivarControles(false);
             });
         });
@@ -104,5 +118,46 @@ public class SistemaController {
     @FXML
     public void clickLimpiar() {
         vista.preparar();
+        ultimoResultado = null;
+        btnExportar.setDisable(true);
+    }
+
+    @FXML
+    private void handleExportar() {
+        if (ultimoResultado == null) {
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar resultados");
+
+        fileChooser.getExtensionFilters().addAll(
+            new ExtensionFilter("CSV (*.csv)", "*.csv"),
+            new ExtensionFilter("TXT (*.txt)", "*.txt")
+        );
+
+        fileChooser.setInitialFileName("resultado_simulacion.csv");
+
+        File file = fileChooser.showSaveDialog(
+            btnExportar.getScene().getWindow()
+        );
+
+        if (file == null) {
+            return;
+        }
+
+        try {
+            String nombre = file.getName().toLowerCase();
+            String separador = nombre.endsWith(".txt") ? "\t" : ",";
+
+            ExportadorService.exportarAArchivo(
+                ultimoResultado,
+                file,
+                separador
+            );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

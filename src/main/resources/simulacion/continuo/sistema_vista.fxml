@@ -45,6 +45,9 @@
                   <Button fx:id="btnLimpiar" maxWidth="1.1797693134862315E308" mnemonicParsing="false" onAction="#clickLimpiar" prefWidth="120.0" text="Limpiar" />
                </children>
             </HBox>
+
+            <Button fx:id="btnExportar" text="Descargar Resultados (.csv)" style="-fx-background-color: #FF5722; -fx-text-fill: white;"
+               onAction="#handleExportar" disable="true" maxWidth="Infinity"/>
          </children>
       </VBox>
    </left>
