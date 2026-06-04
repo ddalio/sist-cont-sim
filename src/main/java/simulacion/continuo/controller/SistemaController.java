@@ -1,17 +1,23 @@
 package simulacion.continuo.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
+import simulacion.continuo.model.ResultadoSimulacion;
 import simulacion.continuo.model.configuracion.Configuracion;
 import simulacion.continuo.model.configuracion.ConfiguracionLoader;
 import simulacion.continuo.model.SimuladorService;
 import simulacion.continuo.view.SistemaGrafico;
 import simulacion.continuo.view.ControlParametro;
 import simulacion.continuo.view.PanelParametros;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SistemaController {
@@ -64,9 +70,28 @@ public class SistemaController {
     public void clickIniciar() {
         desactivarControles(true);
         vista.preparar();
-        simuladorService.ejecutar(panelUI.obtenerValores(), btnTipoSistema.isSelected(), (pos, vel, fase, tFinal) -> {
-            vista.actualizar(pos, vel, fase, tFinal);
-            desactivarControles(false);
+        
+        simuladorService.ejecutar(panelUI.obtenerValores(), btnTipoSistema.isSelected(), (resultado) -> {
+            // Mapeo de datos puros a formato de JavaFX Charts
+            List<XYChart.Data<Number, Number>> listaPosicion = new ArrayList<>();
+            List<XYChart.Data<Number, Number>> listaVelocidad = new ArrayList<>();
+            List<XYChart.Data<Number, Number>> listaFases = new ArrayList<>();
+
+            for (int i = 0; i < resultado.tiempos().size(); i++) {
+                double t = resultado.tiempos().get(i);
+                double x = resultado.posiciones().get(i);
+                double v = resultado.velocidades().get(i);
+
+                listaPosicion.add(new XYChart.Data<>(t, x));
+                listaVelocidad.add(new XYChart.Data<>(t, v));
+                listaFases.add(new XYChart.Data<>(x, v));
+            }
+
+            // Actualizar UI en el hilo de JavaFX
+            Platform.runLater(() -> {
+                vista.actualizar(listaPosicion, listaVelocidad, listaFases, resultado.tFinal());
+                desactivarControles(false);
+            });
         });
     }
 
