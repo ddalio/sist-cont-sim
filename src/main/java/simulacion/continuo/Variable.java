@@ -1,14 +1,16 @@
-package simulacion.continuo.variables;
+package simulacion.continuo;
+
+import simulacion.continuo.terminos.Termino;
 
 import java.util.List;
-import java.util.Map;
 
-public abstract class Variable {
+public class Variable {
+    private List<Termino> terminos;
     private String nombre;
     private double valor;
     private double derivada;
 
-    public Variable(String nombre, double valor) {
+    public Variable(String nombre, double valor, List<Termino> terminos) {
         this.nombre = nombre;
         this.valor = valor;
     }
@@ -37,5 +39,11 @@ public abstract class Variable {
         valor += derivada * dt;
     }
 
-    public abstract void calcularDerivada(Map<String, Double> parametros, List<Variable> variables);
+    public void calcularDerivada(Estado estado) {
+        double derivada = 0.0;
+        for(Termino termino : terminos){
+            derivada += termino.calcular(estado);
+        }
+        setDerivada(derivada);
+    }
 }

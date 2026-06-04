@@ -1,7 +1,6 @@
 package simulacion.continuo.terminos;
 
 import simulacion.continuo.Estado;
-import simulacion.continuo.variables.Variable;
 
 public class Amortiguamiento implements Termino {
     double coeficienteAmortiguamiento, masa;
