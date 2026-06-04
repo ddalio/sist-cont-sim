@@ -100,27 +100,60 @@ Se integra el sistema mediante un método numérico con paso fijo $h = 0{,}001$ 
 
 \subsection{Evolución temporal}
 
+Estos son los resultados de la simulación en función de evolución en el tiempo para un sistema NO lineal.
+
 \begin{figure}[H]
     \centering
-    \fbox{\rule{0pt}{4cm}\rule{0.9\textwidth}{0pt}}
+    \fbox{
+        \includegraphics[width=0.7\textwidth]{sist-no-lineal-evol-temp.png}
+    }
+    \caption{Desplazamiento $x(t)$ y velocidad $v(t)$ en función del tiempo.}
+    \label{fig:temporal}
+\end{figure}
+
+Y estos son los resultados de la simulación en función de evolución en el tiempo para un sistema lineal.
+
+\begin{figure}[H]
+    \centering
+    \fbox{
+        \includegraphics[width=0.7\textwidth]{sist-lineal-evol-temp.png}
+    }
     \caption{Desplazamiento $x(t)$ y velocidad $v(t)$ en función del tiempo.}
     \label{fig:temporal}
 \end{figure}
 
 \subsection{Diagrama de fase}
 
+Estos son los resultados de la simulación en función del diagrama de fase para un sistema NO lineal.
+
 \begin{figure}[H]
     \centering
-    \fbox{\rule{0pt}{6cm}\rule{0.6\textwidth}{0pt}}
+    \fbox{
+        \includegraphics[width=0.7\textwidth]{sist-no-lineal-diag-fase.png}
+    }
     \caption{Diagrama de fase $v(t)$ vs.\ $x(t)$.}
-    \label{fig:fase}
+    \label{fig:temporal}
+\end{figure}
+
+Estos son los resultados de la simulación en función del diagrama de fase para un sistema lineal.
+
+\begin{figure}[H]
+    \centering
+    \fbox{
+        \includegraphics[width=0.7\textwidth]{sist-lineal-diag-fase.png}
+    }
+    \caption{Diagrama de fase $v(t)$ vs.\ $x(t)$.}
+    \label{fig:temporal}
 \end{figure}
 
 % ══════════════════════════════════════════════════════════════════════════════
 \section{Comparación: sistema lineal vs.\ no lineal}
 
+Podemos observar que el sistema no lineal exhibe una frecuencia de oscilación que varía con la amplitud, mientras que el sistema lineal mantiene una frecuencia constante. Además, el amortiguamiento no lineal hace que el sistema no lineal tarde más en alcanzar el reposo, especialmente cerca del equilibrio, en comparación con el sistema lineal. En el diagrama de fase, el sistema no lineal muestra una trayectoria que se estrecha progresivamente, mientras que el sistema lineal forma una espiral más uniforme hacia el origen.
+
 % ══════════════════════════════════════════════════════════════════════════════
 \section{Conclusiones}
 
+En conclusión, la introducción de no linealidades en la rigidez y el amortiguamiento modifica significativamente el comportamiento dinámico del sistema masa-resorte. La frecuencia de oscilación se vuelve dependiente de la amplitud, y el proceso de amortiguamiento se ralentiza cerca del equilibrio. Estas características resaltan la importancia de considerar efectos no lineales en el análisis de sistemas dinámicos reales.
 
 \end{document}
