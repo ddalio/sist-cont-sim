@@ -8,8 +8,13 @@ import java.util.Map;
 
 public class ConfiguracionLoader {
     private static final String CONFIG_FILE = "/config.json";
+    private static Configuracion instance;
 
     public static Configuracion load() {
+        if (instance != null) {
+            return instance;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
 
         try (InputStream is = ConfiguracionLoader.class.getResourceAsStream(CONFIG_FILE)) {
@@ -32,7 +37,8 @@ public class ConfiguracionLoader {
                     simulationParams.put(nombre, new ParametroConfig(valor, min, max, unidad, label));
                 }
             }
-            return new Configuracion(simulationParams, dto.h, dto.t_max, dto.tolerance);
+            instance = new Configuracion(simulationParams, dto.h, dto.t_max, dto.tolerance);
+            return instance;
         } catch (Exception e) {
             throw new RuntimeException("Error al cargar la configuracion", e);
         }

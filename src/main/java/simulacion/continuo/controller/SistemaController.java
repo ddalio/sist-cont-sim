@@ -26,9 +26,11 @@ public class SistemaController {
     private SistemaGrafico vista;
     private final SimuladorService simuladorService = new SimuladorService();
     private PanelParametros panelUI;
+    private Configuracion config;
 
     @FXML
     public void initialize() {
+        config = ConfiguracionLoader.load();
         vista = new SistemaGrafico(chartEvolucion, chartFases, lblTiempo);
         configurarPanelDinamico();
 
@@ -39,10 +41,9 @@ public class SistemaController {
         
         vista.preparar();
     }
-
+    
+    // crea el panel, y agrega un componente por cada parametro
     private void configurarPanelDinamico() {
-        Configuracion config = ConfiguracionLoader.load();
-        
         panelUI = new PanelParametros();
         contenedorParametros.getChildren().add(panelUI);
 
@@ -53,7 +54,6 @@ public class SistemaController {
 
     @FXML
     public void clickValoresIniciales() {
-        Configuracion config = ConfiguracionLoader.load();
         config.parametros().forEach((id, param) -> {
             panelUI.setValor(id, param.valor());
         });
