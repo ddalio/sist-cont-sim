@@ -1,11 +1,11 @@
 package simulacion.continuo.model;
 
-import simulacion.continuo.model.configuracion.Configuracion;
-import simulacion.continuo.model.configuracion.ConfiguracionLoader;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import simulacion.continuo.model.configuracion.Configuracion;
+import simulacion.continuo.model.configuracion.ConfiguracionLoader;
 
 /**
  * Servicio encargado de ejecutar la simulación en un hilo separado.
@@ -17,10 +17,15 @@ public class SimuladorService {
         void alFinalizar(ResultadoSimulacion resultado);
     }
 
-    public void ejecutar(Map<String, Double> parametros, boolean esLineal, SimulacionCallback callback) {
+    public void ejecutar(Map<String, Double> parametros, boolean esLineal,boolean usarRK4, SimulacionCallback callback) {
         Thread hiloCalculo = new Thread(() -> {
             Configuracion config = ConfiguracionLoader.load();
-            SistemaContinuo sistema = SistemaFactory.crear(parametros, esLineal, config);
+            SistemaContinuo sistema =SistemaFactory.crear(
+        parametros,
+        esLineal,
+        usarRK4,
+        config
+    );
             
             final double h = config.h();
             final double tMax = config.t_max();

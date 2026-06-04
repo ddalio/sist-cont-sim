@@ -1,9 +1,10 @@
 package simulacion.continuo.view;
 
+import java.util.List;
+
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
-import java.util.List;
 
 /**
  * Encapsula la gestión de los gráficos y etiquetas de tiempo en la interfaz.

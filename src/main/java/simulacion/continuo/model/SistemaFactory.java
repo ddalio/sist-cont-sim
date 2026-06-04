@@ -1,17 +1,19 @@
 package simulacion.continuo.model;
 
-import simulacion.continuo.model.configuracion.Configuracion;
-import simulacion.continuo.model.metodos.IntegradorRK4;
-import simulacion.continuo.model.terminos.Termino;
-import simulacion.continuo.model.terminos.TerminoFactory;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import simulacion.continuo.model.configuracion.Configuracion;
+import simulacion.continuo.model.metodos.Integrador;
+import simulacion.continuo.model.metodos.IntegradorEuler;
+import simulacion.continuo.model.metodos.IntegradorRK4;
+import simulacion.continuo.model.terminos.Termino;
+import simulacion.continuo.model.terminos.TerminoFactory;
+
 public class SistemaFactory {
 
-    public static SistemaContinuo crear(Map<String, Double> parametros, boolean esLineal, Configuracion config) {
+    public static SistemaContinuo crear(Map<String, Double> parametros, boolean esLineal, boolean usarRK4, Configuracion config) {
         TerminoFactory terminoFactory = new TerminoFactory(parametros);
         
         List<Termino> terminosVelocidad = esLineal ? 
@@ -28,7 +30,9 @@ public class SistemaFactory {
         variables.put(posicion.getNombre(), posicion);
         Estado estado = new Estado(variables);
 
-        SistemaContinuo sistema = new SistemaContinuo(estado, new IntegradorRK4());
+        Integrador integrador = usarRK4 ? new IntegradorRK4() : new IntegradorEuler();
+
+        SistemaContinuo sistema = new SistemaContinuo(estado,integrador);
         sistema.cargarParametros(config);
         
         return sistema;

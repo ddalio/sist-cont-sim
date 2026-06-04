@@ -38,7 +38,7 @@
             </ScrollPane>
             
             <ToggleButton fx:id="btnTipoSistema" maxWidth="1.1797693134862315E308" mnemonicParsing="false" text="Sistema: No Lineal" />
-            
+            <ToggleButton fx:id="btnMetodo" text="Método: Euler"/>
             <HBox spacing="10.0">
                <children>
                   <Button fx:id="btnRun" maxWidth="1.1797693134862315E308" mnemonicParsing="false" onAction="#clickIniciar" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Run" />

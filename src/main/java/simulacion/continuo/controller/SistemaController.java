@@ -30,7 +30,7 @@ public class SistemaController {
     @FXML private LineChart<Number, Number> chartFases;
     @FXML private Label lblTiempo;
     @FXML private VBox contenedorParametros;
-    @FXML private ToggleButton btnTipoSistema;
+    @FXML private ToggleButton btnTipoSistema, btnMetodo;
     @FXML private Button btnRun, btnLimpiar, btnValoresIniciales,  btnExportar;
 
     private SistemaGrafico vista;
@@ -50,6 +50,12 @@ public class SistemaController {
             panelUI.setDeshabilitado("coeficienteNoLinealidad", isSelected);
         });
         
+        btnMetodo.setText("Método: Euler");
+
+        btnMetodo.selectedProperty().addListener((obs, oldVal, selected) -> {
+            btnMetodo.setText(selected ? "Método: RK4" : "Método: Euler");
+        });
+
         vista.preparar();
     }
     
@@ -76,7 +82,7 @@ public class SistemaController {
         desactivarControles(true);
         vista.preparar();
         
-        simuladorService.ejecutar(panelUI.obtenerValores(), btnTipoSistema.isSelected(), (resultado) -> {
+        simuladorService.ejecutar(panelUI.obtenerValores(), btnTipoSistema.isSelected(), btnMetodo.isSelected(), (resultado) -> {
             // Mapeo de datos puros a formato de JavaFX Charts
             List<XYChart.Data<Number, Number>> listaPosicion = new ArrayList<>();
             List<XYChart.Data<Number, Number>> listaVelocidad = new ArrayList<>();
@@ -89,6 +95,12 @@ public class SistemaController {
 
                 listaPosicion.add(new XYChart.Data<>(t, x));
                 listaVelocidad.add(new XYChart.Data<>(t, v));
+                if (i < 20) {
+                    System.out.printf(
+                        "%d -> x=%f  v=%f%n",
+                        i, x, v
+                    );
+                }
                 listaFases.add(new XYChart.Data<>(x, v));
             }
 
